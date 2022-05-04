@@ -1,0 +1,18 @@
+image: 
+  name: jruby:9.2
+  #docker-compose is an entrypoint by default with this image, so we need to fix this and overwrite it with nothing
+
+stages:
+  - build
+
+build:
+  stage: build
+  script:
+    - bundle install
+    - bundle exec rspec
+    - gem build *.gemspec
+  artifacts:
+    paths:
+      - logstash-filter-opensearch*.gem
+    expire_in: 1000 yrs
+

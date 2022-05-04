@@ -1,5 +1,5 @@
-Elasticsearch
-Copyright 2012-2015 Elasticsearch
+OpenSearch
+Copyright 2012-2015 OpenSearch
 
 This product includes software developed by The Apache Software
 Foundation (http://www.apache.org/).

@@ -1,14 +1,14 @@
 # encoding: utf-8
 require "logstash/devutils/rspec/spec_helper"
 require "logstash/plugin"
-require "logstash/filters/elasticsearch"
+require "logstash/filters/opensearch"
 require "logstash/json"
 
-describe LogStash::Filters::Elasticsearch do
+describe LogStash::Filters::OpenSearch do
 
   context "registration" do
 
-    let(:plugin) { LogStash::Plugin.lookup("filter", "elasticsearch").new({}) }
+    let(:plugin) { LogStash::Plugin.lookup("filter", "opensearch").new({}) }
     before do
       allow(plugin).to receive(:test_connection!)
     end
@@ -24,7 +24,7 @@ describe LogStash::Filters::Elasticsearch do
         "hosts" => ["localhost:9200"],
         "query" => "response: 404",
         "fields" => { "response" => "code" },
-        "docinfo_fields" => { "_index" => "es_index" },
+        "docinfo_fields" => { "_index" => "opensearch_index" },
         "aggregation_fields" => { "bytes_avg" => "bytes_avg_ls_field" }
       }
     end
@@ -38,17 +38,17 @@ describe LogStash::Filters::Elasticsearch do
     let(:client) { double(:client) }
 
     before(:each) do
-      allow(LogStash::Filters::ElasticsearchClient).to receive(:new).and_return(client)
+      allow(LogStash::Filters::OpenSearchClient).to receive(:new).and_return(client)
       allow(client).to receive(:search).and_return(response)
       allow(plugin).to receive(:test_connection!)
       plugin.register
     end
 
     after(:each) do
-      Thread.current[:filter_elasticsearch_client] = nil
+      Thread.current[:filter_opensearch_client] = nil
     end
 
-    # Since the Elasticsearch Ruby client is not thread safe
+    # Since the OpenSearch Ruby client is not thread safe
     # and under high load we can get error with the connection pool
     # we have decided to create a new instance per worker thread which
     # will be lazy created on the first call to `#filter`
@@ -66,7 +66,7 @@ describe LogStash::Filters::Elasticsearch do
     it "should enhance the current event with new data" do
       plugin.filter(event)
       expect(event.get("code")).to eq(404)
-      expect(event.get("es_index")).to eq("logstash-2014.08.26")
+      expect(event.get("opensearch_index")).to eq("logstash-2014.08.26")
       expect(event.get("bytes_avg_ls_field")["value"]).to eq(294)
     end
 
@@ -113,7 +113,7 @@ describe LogStash::Filters::Elasticsearch do
       end
     end
 
-    context 'when Elasticsearch 7.x gives us a totals object instead of an integer' do
+    context 'when OpenSearch 7.x gives us a totals object instead of an integer' do
       let(:config) do
         {
             "hosts" => ["localhost:9200"],
@@ -124,7 +124,7 @@ describe LogStash::Filters::Elasticsearch do
       end
 
       let(:response) do
-        LogStash::Json.load(File.read(File.join(File.dirname(__FILE__), "fixtures", "elasticsearch_7.x_hits_total_as_object.json")))
+        LogStash::Json.load(File.read(File.join(File.dirname(__FILE__), "fixtures", "opensearch_7.x_hits_total_as_object.json")))
       end
 
       it "should enhance the current event with new data" do
@@ -136,7 +136,7 @@ describe LogStash::Filters::Elasticsearch do
     context "if something wrong happen during connection" do
 
       before(:each) do
-        allow(LogStash::Filters::ElasticsearchClient).to receive(:new).and_return(client)
+        allow(LogStash::Filters::OpenSearchClient).to receive(:new).and_return(client)
         allow(client).to receive(:search).and_raise("connection exception")
         plugin.register
       end
@@ -144,7 +144,7 @@ describe LogStash::Filters::Elasticsearch do
       it "tag the event as something happened, but still deliver it" do
         expect(plugin.logger).to receive(:warn)
         plugin.filter(event)
-        expect(event.to_hash["tags"]).to include("_elasticsearch_lookup_failure")
+        expect(event.to_hash["tags"]).to include("_opensearch_lookup_failure")
       end
     end
 
@@ -262,7 +262,7 @@ describe LogStash::Filters::Elasticsearch do
       end
 
       before(:each) do
-        allow(LogStash::Filters::ElasticsearchClient).to receive(:new).and_return(client)
+        allow(LogStash::Filters::OpenSearchClient).to receive(:new).and_return(client)
         allow(client).to receive(:search).and_return(response)
         plugin.register
       end
@@ -270,7 +270,7 @@ describe LogStash::Filters::Elasticsearch do
       it "tag the event as something happened, but still deliver it" do
         expect(plugin.logger).to receive(:warn)
         plugin.filter(event)
-        expect(event.to_hash["tags"]).to include("_elasticsearch_lookup_failure")
+        expect(event.to_hash["tags"]).to include("_opensearch_lookup_failure")
       end
     end
 
@@ -305,7 +305,7 @@ describe LogStash::Filters::Elasticsearch do
     end
 
     after(:each) do
-      Thread.current[:filter_elasticsearch_client] = nil
+      Thread.current[:filter_opensearch_client] = nil
     end
 
     describe "cloud.id" do
@@ -415,7 +415,7 @@ describe LogStash::Filters::Elasticsearch do
     let(:client) { double(:client) }
 
     before(:each) do
-      allow(LogStash::Filters::ElasticsearchClient).to receive(:new).and_return(client)
+      allow(LogStash::Filters::OpenSearchClient).to receive(:new).and_return(client)
       allow(plugin).to receive(:test_connection!)
       plugin.register
     end

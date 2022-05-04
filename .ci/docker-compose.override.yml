@@ -8,17 +8,17 @@ services:
         - INTEGRATION=${INTEGRATION:-false}
         - SECURE_INTEGRATION=${SECURE_INTEGRATION:-false}
 
-  elasticsearch:
+  opensearch:
     build:
       context: ../
-      dockerfile: .ci/Dockerfile.elasticsearch
+      dockerfile: .ci/Dockerfile.opensearch
       args:
-        - ELASTIC_STACK_VERSION=$ELASTIC_STACK_VERSION
+        - OPENSEARCH_VERSION=$OPENSEARCH_VERSION
         - INTEGRATION=${INTEGRATION:-false}
         - SECURE_INTEGRATION=${SECURE_INTEGRATION:-false}
-    command: /usr/share/elasticsearch/elasticsearch-run.sh
+    command: /usr/share/opensearch/opensearch-run.sh
     tty: true
     ports:
       - "9200:9200"
-    user: elasticsearch
+    user: opensearch
 
