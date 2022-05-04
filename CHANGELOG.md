@@ -1,29 +1,29 @@
 ## 3.8.0
-  - Added api_key support [#132](https://github.com/logstash-plugins/logstash-filter-elasticsearch/pull/132)
+  - Added api_key support [#132](https://github.com/logstash-plugins/logstash-filter-opensearch/pull/132)
 
 ## 3.7.2
-  - [DOC] Removed outdated compatibility notice [#131](https://github.com/logstash-plugins/logstash-filter-elasticsearch/pull/131)
+  - [DOC] Removed outdated compatibility notice [#131](https://github.com/logstash-plugins/logstash-filter-opensearch/pull/131)
 
 ## 3.7.1
-  - Fix: solves an issue where non-ascii unicode values in a template were not handled correctly [#128](https://github.com/logstash-plugins/logstash-filter-elasticsearch/pull/128)
+  - Fix: solves an issue where non-ascii unicode values in a template were not handled correctly [#128](https://github.com/logstash-plugins/logstash-filter-opensearch/pull/128)
 
 ## 3.7.0
-  - Feat: support cloud_id / cloud_auth configuration [#122](https://github.com/logstash-plugins/logstash-filter-elasticsearch/pull/122)
+  - Feat: support cloud_id / cloud_auth configuration [#122](https://github.com/logstash-plugins/logstash-filter-opensearch/pull/122)
 
 ## 3.6.1
-  - Loosen restrictions on Elasticsearch gem ([#120](https://github.com/logstash-plugins/logstash-filter-elasticsearch/pull/120))
+  - Loosen restrictions on OpenSearch gem ([#120](https://github.com/logstash-plugins/logstash-filter-opensearch/pull/120))
 
 ## 3.6.0
-  - Add support for extracting hits total from Elasticsearch 7.x responses
+  - Add support for extracting hits total from OpenSearch 7.x responses
 
 ## 3.5.0
   - Added connection check during register to avoid failures during processing
-  - Changed Elasticsearch Client transport to use Manticore
+  - Changed OpenSearch Client transport to use Manticore
   - Changed amount of logging details during connection failure
 
 ## 3.4.0
-  - Adds `[@metadata][total_hits]` with total hits returned from the query ([#106](https://github.com/logstash-plugins/logstash-filter-elasticsearch/pull/106))
-  - Improves error logging to fully inspect caught exceptions ([#105](https://github.com/logstash-plugins/logstash-filter-elasticsearch/pull/105))
+  - Adds `[@metadata][total_hits]` with total hits returned from the query ([#106](https://github.com/logstash-plugins/logstash-filter-opensearch/pull/106))
+  - Improves error logging to fully inspect caught exceptions ([#105](https://github.com/logstash-plugins/logstash-filter-opensearch/pull/105))
 
 ## 3.3.1
   - Fix: The filter now only calls `filter_matched` on events that actually matched.
@@ -32,7 +32,7 @@
     `remove_field`)
 
 ## 3.3.0
-  - Enhancement : if elasticsearch response contains any shard failure, then `tag_on_failure` tags are added to Logstash event
+  - Enhancement : if opensearch response contains any shard failure, then `tag_on_failure` tags are added to Logstash event
   - Enhancement : add support for nested fields
   - Enhancement : add 'docinfo_fields' option
   - Enhancement : add 'aggregation_fields' option
@@ -44,7 +44,7 @@
   - `index` setting now supports field formatting, such as `index => "%{myindex}"` (Boris Gorbylev)
 
 ## 3.1.8
-  - Fix a thread safety issue when using this filter with multiple workers on heavy load, we now create an elasticsearch client for every LogStash worker. #76
+  - Fix a thread safety issue when using this filter with multiple workers on heavy load, we now create an opensearch client for every LogStash worker. #76
 
 ## 3.1.6
   - Fix some documentation issues

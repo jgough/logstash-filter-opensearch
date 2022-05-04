@@ -1,16 +1,16 @@
 # encoding: utf-8
 require "logstash/devutils/rspec/spec_helper"
 require "logstash/plugin"
-require "logstash/filters/elasticsearch"
-require_relative "../../../spec/es_helper"
+require "logstash/filters/opensearch"
+require_relative "../../../spec/opensearch_helper"
 
-describe LogStash::Filters::Elasticsearch, :integration => true do
+describe LogStash::Filters::OpenSearch, :integration => true do
 
 
   let(:config) do
     {
       "index" => 'logs',
-      "hosts" => [ESHelper.get_host_port],
+      "hosts" => [OpenSearchHelper.get_host_port],
       "query" => "response: 404",
       "sort" => "response",
       "fields" => [ ["response", "code"] ],
@@ -20,16 +20,16 @@ describe LogStash::Filters::Elasticsearch, :integration => true do
   let(:event)  { LogStash::Event.new({}) }
 
   before(:each) do
-    @es = ESHelper.get_client
+    @opensearch = OpenSearchHelper.get_client
     # Delete all templates first.
     # Clean ES of data before we start.
-    @es.indices.delete_template(:name => "*")
+    @opensearch.indices.delete_template(:name => "*")
     # This can fail if there are no indexes, ignore failure.
-    @es.indices.delete(:index => "*") rescue nil
+    @opensearch.indices.delete(:index => "*") rescue nil
     10.times do
-      ESHelper.index_doc(@es, :index => 'logs', :body => { :response => 404, :this => 'that'})
+      OpenSearchHelper.index_doc(@opensearch, :index => 'logs', :body => { :response => 404, :this => 'that'})
     end
-    @es.indices.refresh
+    @opensearch.indices.refresh
 
     plugin.register
   end
@@ -44,7 +44,7 @@ describe LogStash::Filters::Elasticsearch, :integration => true do
     let(:config) do
       {
         "index" => 'logs',
-        "hosts" => [ESHelper.get_host_port],
+        "hosts" => [OpenSearchHelper.get_host_port],
         "query" => "response: 404",
         "fields" => [ ["response", "code"] ],
         "sort" => "response",

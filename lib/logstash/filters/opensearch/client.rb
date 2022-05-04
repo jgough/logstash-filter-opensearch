@@ -1,12 +1,10 @@
 # encoding: utf-8
-require "elasticsearch"
+require "opensearch"
 require "base64"
-require "elasticsearch/transport/transport/http/manticore"
-
 
 module LogStash
   module Filters
-    class ElasticsearchClient
+    class OpenSearchClient
 
       attr_reader :client
 
@@ -25,8 +23,8 @@ module LogStash
         ssl_options = { ssl: true, ca_file: options[:ca_file] } if options[:ca_file]
         ssl_options ||= {}
 
-        logger.info("New ElasticSearch filter client", :hosts => hosts)
-        @client = ::Elasticsearch::Client.new(hosts: hosts, transport_options: transport_options, transport_class: ::Elasticsearch::Transport::Transport::HTTP::Manticore, :ssl => ssl_options)
+        logger.info("New OpenSearch filter client", :hosts => hosts)
+        @client = ::OpenSearch::Client.new(hosts: hosts, transport_options: transport_options, :ssl => ssl_options)
       end
 
       def search(params)
@@ -37,7 +35,7 @@ module LogStash
 
       def setup_basic_auth(user, password)
         return {} unless user && password && password.value
-
+        
         token = ::Base64.strict_encode64("#{user}:#{password.value}")
         { Authorization: "Basic #{token}" }
       end
