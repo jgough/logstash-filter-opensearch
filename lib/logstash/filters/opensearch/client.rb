@@ -18,7 +18,7 @@ module LogStash
         transport_options[:headers].merge!(setup_basic_auth(user, password))
         transport_options[:headers].merge!(setup_api_key(api_key))
 
-        hosts.map! {|h| { host: h, scheme: 'https' } } if ssl
+        hosts = hosts.map { |host| { host: host, scheme: 'https' } } if ssl
         # set ca_file even if ssl isn't on, since the host can be an https url
         ssl_options = { ssl: true, ca_file: options[:ca_file] } if options[:ca_file]
         ssl_options ||= {}
