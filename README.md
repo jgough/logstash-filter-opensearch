@@ -1,3 +1,8 @@
+I'm afraid I am unable to maintain this plugin going forwards.  If you feel strongly about the need for this plugin then please consider making your voice heard here:
+https://github.com/opensearch-project/opensearch-clients/issues/4#issuecomment-1117526558
+
+If someone wants to take over ownership of this project then please let me know, as OpenSearch do not seem to be interested in maintaining it themselves.
+
 # Logstash Plugin
 
 [![Travis Build Status](https://travis-ci.org/logstash-plugins/logstash-filter-opensearch.svg)](https://travis-ci.org/logstash-plugins/logstash-filter-opensearch)
